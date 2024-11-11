@@ -13,7 +13,10 @@ export function app(): express.Express {
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
 
+  // Here, we now use the `AngularNodeAppEngine` instead of the `CommonEngine`
   const angularNodeAppEngine = new AngularNodeAppEngine();
+
+  server.use('/api/**', (req, res) => res.json({ hello: 'foo' }));
 
   server.get(
     '**',
@@ -23,11 +26,13 @@ export function app(): express.Express {
     })
   );
 
+  // With this config, /404 will not reach the Angular app
   server.get('/404', (req, res, next) => {
     res.send('Express is serving this server only error');
   });
 
   server.get('**', (req, res, next) => {
+    // Yes, this is executed in devMode via the Vite DevServer
     console.log('request', req.url, res.status);
 
     angularNodeAppEngine
@@ -51,4 +56,5 @@ if (isMainModule(import.meta.url)) {
 
 console.warn('Node Express server started');
 
+// This exposes the RequestHandler
 export default createNodeRequestHandler(server);
