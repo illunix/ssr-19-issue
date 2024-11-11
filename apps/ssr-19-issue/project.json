@@ -11,6 +11,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/ssr-19-issue",
+        "outputMode": "server",
         "index": "apps/ssr-19-issue/src/index.html",
         "browser": "apps/ssr-19-issue/src/main.ts",
         "polyfills": ["zone.js"],
